@@ -1,1 +1,1 @@
-# commerce-3for2
+# commerce-promotions
