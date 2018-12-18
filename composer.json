@@ -1,0 +1,40 @@
+{
+	"name": "kuriousagency/commerce-promotions",
+	"description": "Adds promotions",
+	"type": "craft-plugin",
+	"version": "1.0.0",
+	"keywords": [
+		"craft",
+		"cms",
+		"craftcms",
+		"craft-plugin",
+		"promotions"
+	],
+	"support": {
+		"docs": "https://github.com/KuriousAgency/commerce-promotions/blob/master/README.md",
+		"issues": "https://github.com/KuriousAgency/commerce-promotions/issues"
+	},
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Kurious Agency",
+			"homepage": "https://kurious.agency"
+		}
+	],
+	"require": {
+		"craftcms/cms": "^3.0.0-RC1"
+	},
+	"autoload": {
+		"psr-4": {
+			"kuriousagency\\commerce\\promotions\\": "src/"
+		}
+	},
+	"extra": {
+		"name": "Promotions",
+		"handle": "promotions",
+		"hasCpSettings": false,
+		"hasCpSection": false,
+		"changelogUrl": "https://raw.githubusercontent.com/KuriousAgency/commerce-promotions/master/CHANGELOG.md",
+		"class": "kuriousagency\\commerce\\promotions\\Promotions"
+	}
+}
