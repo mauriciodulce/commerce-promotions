@@ -92,7 +92,7 @@ class Promotions extends Plugin
 
         Craft::info(
             Craft::t(
-                'promotions',
+                'commerce-promotions',
                 '{name} plugin loaded',
                 ['name' => $this->name]
             ),
