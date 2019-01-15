@@ -2,7 +2,7 @@
 	"name": "kuriousagency/commerce-promotions",
 	"description": "Adds promotions",
 	"type": "craft-plugin",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"keywords": [
 		"craft",
 		"cms",
@@ -30,7 +30,7 @@
 		}
 	},
 	"extra": {
-		"name": "Promotions",
+		"name": "Commerce Promotions",
 		"handle": "commerce-promotions",
 		"hasCpSettings": false,
 		"hasCpSection": false,
