@@ -255,9 +255,9 @@ class Bundles extends Component implements AdjusterInterface
                 }
 
                 if ($diff !== null) {
-                    $adjustment->amount = $diff;
+                    $adjustment->amount = 0-$diff;
                 } else {
-                    $adjustment->amount = $lineItemDiscount;
+                    $adjustment->amount = 0-$lineItemDiscount;
                 }
 
                 if ($adjustment->amount != 0) {

@@ -71,7 +71,7 @@ class Discount3for2 extends Component implements AdjusterInterface
             if (!$discount->enabled) {
                 continue;
 			}
-			
+			//Craft::dd($discount->name);
 			if (strpos(strtolower($discount->name), '3for2') != false) {
 				//Craft::dump(strpos($discount->name, '3for2'));
 
@@ -206,9 +206,9 @@ class Discount3for2 extends Component implements AdjusterInterface
                 }
 
                 if ($diff !== null) {
-                    $adjustment->amount = $diff;
+                    $adjustment->amount = 0-$diff;
                 } else {
-                    $adjustment->amount = $lineItemDiscount;
+                    $adjustment->amount = 0-$lineItemDiscount;
 				}
 				//Craft::dd($adjustment->amount);
 
@@ -268,7 +268,7 @@ class Discount3for2 extends Component implements AdjusterInterface
 		if ($amount > 0) {
 			$adjustment = $this->_createOrderAdjustment($this->_discount);
 			$adjustment->lineItemId = null;
-            $adjustment->amount = -$amount;
+            $adjustment->amount = 0-$amount;
             //$adjustments[] = $adjustment;
 		}
 		

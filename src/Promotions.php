@@ -62,16 +62,24 @@ class Promotions extends Plugin
 		self::$plugin = $this;
 		
 		Event::on(OrderAdjustments::class, OrderAdjustments::EVENT_REGISTER_ORDER_ADJUSTERS, function(RegisterComponentTypesEvent $e) {
+			
+			$types = [
+				Discount3for2::class, 
+				Bundles::class, 
+			];
+			
 			foreach ($e->types as $key => $type)
 			{
-				if ($type == 'craft\\commerce\\adjusters\\Discount') {
+				/*if ($type == 'craft\\commerce\\adjusters\\Discount') {
 					array_splice($e->types, $key, 1, [
 						Discount3for2::class, 
 						Bundles::class, 
 						'craft\\commerce\\adjusters\\Discount'
 					]);
-				}
+				}*/
+				$types[] = $type;
 			}
+			$e->types = $types;
 		});
 
 		Event::on(CommerceDiscount::class, CommerceDiscount::EVENT_AFTER_DISCOUNT_ADJUSTMENTS_CREATED, function(DiscountAdjustmentsEvent $e) {
