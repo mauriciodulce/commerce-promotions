@@ -72,7 +72,7 @@ class Discount3for2 extends Component implements AdjusterInterface
                 continue;
 			}
 			//Craft::dd($discount->name);
-			if (strpos(strtolower($discount->name), '3for2') != false) {
+			if (strpos(strtolower($discount->name), '3for2') !== false) {
 				//Craft::dump(strpos($discount->name, '3for2'));
 
 				if ($discount->code == null) {

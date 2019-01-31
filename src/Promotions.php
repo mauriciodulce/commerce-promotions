@@ -12,6 +12,7 @@ namespace kuriousagency\commerce\promotions;
 
 use kuriousagency\commerce\promotions\adjusters\Discount3for2;
 use kuriousagency\commerce\promotions\adjusters\Bundles;
+use kuriousagency\commerce\promotions\adjusters\Trade;
 
 use Craft;
 use craft\base\Plugin;
@@ -66,6 +67,7 @@ class Promotions extends Plugin
 			$types = [
 				Discount3for2::class, 
 				Bundles::class, 
+				Trade::class, 
 			];
 			
 			foreach ($e->types as $key => $type)
@@ -84,9 +86,14 @@ class Promotions extends Plugin
 
 		Event::on(CommerceDiscount::class, CommerceDiscount::EVENT_AFTER_DISCOUNT_ADJUSTMENTS_CREATED, function(DiscountAdjustmentsEvent $e) {
 			
-			if (strpos(strtolower($e->discount->name), 'bundle') != false) {
+			if (strpos(strtolower($e->discount->name), 'bundle') !== false) {
 				$e->isValid = false;
 			}
+			if (strpos(strtolower($e->discount->name), 'trade') !== false) {
+				$e->isValid = false;
+			}
+			//Craft::dd(strpos(strtolower($e->discount->name), 'trade'));
+			
 		});
 
         Event::on(
