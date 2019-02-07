@@ -64,24 +64,27 @@ class Promotions extends Plugin
 		
 		Event::on(OrderAdjustments::class, OrderAdjustments::EVENT_REGISTER_ORDER_ADJUSTERS, function(RegisterComponentTypesEvent $e) {
 			
-			$types = [
+			$adjusters = [
 				Discount3for2::class, 
 				Bundles::class, 
-				Trade::class, 
+				//Trade::class, 
 			];
-			
-			foreach ($e->types as $key => $type)
+
+			$existing = [];
+			foreach ($e->types as $type)
 			{
-				/*if ($type == 'craft\\commerce\\adjusters\\Discount') {
-					array_splice($e->types, $key, 1, [
-						Discount3for2::class, 
-						Bundles::class, 
-						'craft\\commerce\\adjusters\\Discount'
-					]);
-				}*/
-				$types[] = $type;
+				$key = explode('\\',$type);
+				$existing[] = end($key);
 			}
-			$e->types = $types;
+
+			foreach ($adjusters as $type)
+			{
+				$key = explode('\\',$type);
+				if (!in_array(end($key), $existing)) {
+					$e->types = array_merge([$type], $e->types);
+				}
+			}
+			//Craft::dd($e->types);
 		});
 
 		Event::on(CommerceDiscount::class, CommerceDiscount::EVENT_AFTER_DISCOUNT_ADJUSTMENTS_CREATED, function(DiscountAdjustmentsEvent $e) {
@@ -89,7 +92,10 @@ class Promotions extends Plugin
 			if (strpos(strtolower($e->discount->name), 'bundle') !== false) {
 				$e->isValid = false;
 			}
-			if (strpos(strtolower($e->discount->name), 'trade') !== false) {
+			/*if (strpos(strtolower($e->discount->name), 'trade') !== false) {
+				$e->isValid = false;
+			}*/
+			if (strpos(strtolower($e->discount->name), '3for2') !== false) {
 				$e->isValid = false;
 			}
 			//Craft::dd(strpos(strtolower($e->discount->name), 'trade'));

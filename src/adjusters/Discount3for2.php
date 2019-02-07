@@ -99,7 +99,8 @@ class Discount3for2 extends Component implements AdjusterInterface
                     break;
                 }
             }
-        }
+		}
+		//Craft::dd($adjustments);
 
         return $adjustments;
     }
@@ -111,7 +112,7 @@ class Discount3for2 extends Component implements AdjusterInterface
      * @param DiscountModel $discount
      * @return OrderAdjustment
      */
-    private function _createOrderAdjustment(DiscountModel $discount): OrderAdjustment
+    private function _createOrderAdjustment(DiscountModel $discount, $data): OrderAdjustment
     {
         //preparing model
         $adjustment = new OrderAdjustment();
@@ -119,7 +120,7 @@ class Discount3for2 extends Component implements AdjusterInterface
         $adjustment->name = $discount->name;
         $adjustment->orderId = $this->_order->id;
         $adjustment->description = $discount->description;
-        $adjustment->sourceSnapshot = $discount->attributes;
+        $adjustment->sourceSnapshot = array_merge($discount->attributes, $data);
 
         return $adjustment;
     }
@@ -186,18 +187,24 @@ class Discount3for2 extends Component implements AdjusterInterface
 		}
 		
 		//Craft::dd($matchingLineIds);
-		$amounts = [];
+		//$amounts = [];
 
         foreach ($this->_order->getLineItems() as $item) {
             if (in_array($item->id, $matchingLineIds, false)) {
-                $adjustment = $this->_createOrderAdjustment($this->_discount);
+				$adjustment = $this->_createOrderAdjustment($this->_discount, ['qty'=>floor($item->qty/3)]);
+				/*if(!$item->id){
+					
+					$lineItem = Commerce::getInstance()->getLineItems()->resolveLineItem($this->_order->id, $item->purchasableId, $item->options);
+					Craft::dd($lineItem);
+				}*/
+				//Craft::dump($item->id);
                 $adjustment->lineItemId = $item->id;
 
 				$amountPerItem = Currency::round($this->_discount->perItemDiscount * $item->qty);
 
 				$lineItemDiscount = (floor($item->qty/3)) * $item->salePrice;
 
-				//Craft::dd($lineItemDiscount);
+				//Craft::dump($lineItemDiscount);
 
 				$diff = null;
                 // If the discount is now larger than the subtotal only make the discount amount the same as the total of the line.
@@ -222,10 +229,10 @@ class Discount3for2 extends Component implements AdjusterInterface
                     $adjustments[] = $adjustment;
                 }*/
 				
-				for($i = 0; $i < $item->qty; $i++)
-				{
-					$amounts[] = $item->salePrice;
-				}
+				// for($i = 0; $i < $item->qty; $i++)
+				// {
+				// 	$amounts[] = $item->salePrice;
+				// }
 
                 //Default is percentage off already discounted price
                 /*$existingLineItemDiscount = $item->getAdjustmentsTotalByType('discount');
@@ -255,24 +262,8 @@ class Discount3for2 extends Component implements AdjusterInterface
                 }*/
             }
 		}
+		//Craft::dd($adjustments);
 
-		$amount = 0;
-		$toDiscount = floor(count($amounts)/3);
-		sort($amounts);
-
-		for($i = 0; $i < $toDiscount; $i++)
-		{
-			$amount += $amounts[$i];
-		}
-
-		if ($amount > 0) {
-			$adjustment = $this->_createOrderAdjustment($this->_discount);
-			$adjustment->lineItemId = null;
-            $adjustment->amount = 0-$amount;
-            //$adjustments[] = $adjustment;
-		}
-		
-		//Craft::dd($amount);
 
         foreach ($this->_order->getLineItems() as $item) {
             if (in_array($item->id, $matchingLineIds, false) && $discount->freeShipping) {
