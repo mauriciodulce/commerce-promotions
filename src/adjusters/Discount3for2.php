@@ -158,9 +158,14 @@ class Discount3for2 extends Component implements AdjusterInterface
                         $matchingTotal += $item->getSubtotal();
                     }
                 } else {
-                    $matchingLineIds[] = $item->id;
-                    $matchingQty += $item->qty;
-                    $matchingTotal += $item->getSubtotal();
+					$customer = $this->_order->getCustomer();
+					$user = $customer ? $customer->getUser() : null;
+					$customersGroup = Craft::$app->getUserGroups()->getGroupByHandle('customers');
+					if (!$user || ($user && $customersGroup && $user->isInGroup('customers'))) {
+                    	$matchingLineIds[] = $item->id;
+                    	$matchingQty += $item->qty;
+						$matchingTotal += $item->getSubtotal();
+					}
                 }
             }
 		}
