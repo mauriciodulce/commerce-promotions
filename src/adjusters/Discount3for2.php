@@ -271,7 +271,7 @@ class Discount3for2 extends Component implements AdjusterInterface
 
 
         foreach ($this->_order->getLineItems() as $item) {
-            if (in_array($item->id, $matchingLineIds, false) && $discount->freeShipping) {
+            if (in_array($item->id, $matchingLineIds, false) && $discount->hasFreeShippingForMatchingItems) {
                 $adjustment = $this->_createOrderAdjustment($this->_discount);
                 $shippingCost = $item->getAdjustmentsTotalByType('shipping');
                 if ($shippingCost > 0) {
